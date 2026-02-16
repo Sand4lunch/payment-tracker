@@ -1033,6 +1033,15 @@ class PaymentTrackerApp {
     }
 
 
+    // Service Worker Registration
+    registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
+        }
+    }
+
     populateProjectFilter() {
         const select = document.getElementById('projectFilter');
         if (!select) return;
