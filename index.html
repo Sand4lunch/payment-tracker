@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Payment Tracker Pro</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-improved.css">
     <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
 </head>
 <body>
@@ -133,16 +133,41 @@
             <div id="paymentsView" class="view">
                 <div class="filters-bar">
                     <input type="search" id="searchPayments" class="search-input" placeholder="Search payments...">
+                    
                     <div class="filter-buttons">
                         <button class="filter-btn active" data-filter="all">All</button>
                         <button class="filter-btn" data-filter="Late — not paid">Late</button>
                         <button class="filter-btn" data-filter="Not due yet">Pending</button>
                         <button class="filter-btn" data-filter="Paid">Paid</button>
                     </div>
-                    <select id="projectFilter" class="filter-select">
-                        <option value="">All Projects</option>
+
+                    <!-- Sorting Dropdown -->
+                    <select id="sortSelect" class="filter-select">
+                        <option value="dueDate">Sort: Due Date (Earliest First)</option>
+                        <option value="amountDesc">Sort: Amount (Highest First)</option>
+                        <option value="amountAsc">Sort: Amount (Lowest First)</option>
+                        <option value="project">Sort: Project Name (A-Z)</option>
+                        <option value="status">Sort: Status (Late → Pending → Paid)</option>
                     </select>
+
+                    <!-- Advanced Filters -->
+                    <div class="filters-advanced">
+                        <div class="filter-group">
+                            <div class="filter-group-title">Filter by Projects</div>
+                            <div class="filter-checkboxes" id="projectFilterCheckboxes">
+                                <!-- Project checkboxes will be inserted here -->
+                            </div>
+                            <div class="filter-actions">
+                                <button id="selectAllProjects" class="btn-small">Select All</button>
+                                <button id="clearAllProjects" class="btn-small">Clear All</button>
+                            </div>
+                        </div>
+
+                        <!-- Filtered Totals -->
+                        <div id="filteredTotals"></div>
+                    </div>
                 </div>
+
                 <div id="paymentsList" class="payments-list">
                     <!-- Payment cards will be inserted here -->
                 </div>
@@ -239,6 +264,6 @@
     </div>
 
     <!-- Scripts -->
-    <script src="app.js"></script>
+    <script src="app-improved.js"></script>
 </body>
 </html>
