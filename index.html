@@ -141,31 +141,9 @@
                         <button class="filter-btn" data-filter="Paid">Paid</button>
                     </div>
 
-                    <!-- Sorting Dropdown -->
-                    <select id="sortSelect" class="filter-select">
-                        <option value="dueDate">Sort: Due Date (Earliest First)</option>
-                        <option value="amountDesc">Sort: Amount (Highest First)</option>
-                        <option value="amountAsc">Sort: Amount (Lowest First)</option>
-                        <option value="project">Sort: Project Name (A-Z)</option>
-                        <option value="status">Sort: Status (Late → Pending → Paid)</option>
+                    <select id="projectFilter" class="filter-select">
+                        <option value="">All Projects</option>
                     </select>
-
-                    <!-- Advanced Filters -->
-                    <div class="filters-advanced">
-                        <div class="filter-group">
-                            <div class="filter-group-title">Filter by Projects</div>
-                            <div class="filter-checkboxes" id="projectFilterCheckboxes">
-                                <!-- Project checkboxes will be inserted here -->
-                            </div>
-                            <div class="filter-actions">
-                                <button id="selectAllProjects" class="btn-small">Select All</button>
-                                <button id="clearAllProjects" class="btn-small">Clear All</button>
-                            </div>
-                        </div>
-
-                        <!-- Filtered Totals -->
-                        <div id="filteredTotals"></div>
-                    </div>
                 </div>
 
                 <div id="paymentsList" class="payments-list">
