@@ -1,0 +1,266 @@
+[
+  {
+    "id": 1,
+    "projectName": "מלטים H900 -STARLION",
+    "company": "אלביט",
+    "division": "אוויר",
+    "factory": "",
+    "projectManager": {
+      "name": "וורד חיימוביץ'",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "שטרייך נעמה",
+      "phone": "0549996619",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "",
+      "phone": "0549996619",
+      "email": ""
+    }
+  },
+  {
+    "id": 2,
+    "projectName": "תותח TMG",
+    "company": "אלביט",
+    "division": "יבשה",
+    "factory": "",
+    "projectManager": {
+      "name": "עופר צוריאל",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "לרנר יהודית",
+      "phone": "0525773344",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "",
+      "phone": "0525773344",
+      "email": ""
+    }
+  },
+  {
+    "id": 3,
+    "projectName": "X",
+    "company": "תע\"א",
+    "division": "כלי טייס צבאיים",
+    "factory": "רקיע",
+    "projectManager": {
+      "name": "אפי",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "",
+      "phone": "0523122862",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "רענן",
+      "phone": "0523122862",
+      "email": ""
+    }
+  },
+  {
+    "id": 4,
+    "projectName": "EWSC2 Part 1",
+    "company": "אלביט",
+    "division": "אלישרא",
+    "factory": "",
+    "projectManager": {
+      "name": "אריה גרינברג",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "צהלה",
+      "phone": "0549993466",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "",
+      "phone": "0549993466",
+      "email": ""
+    }
+  },
+  {
+    "id": 5,
+    "projectName": "EWSC2 Part 2",
+    "company": "אלביט",
+    "division": "אלישרא",
+    "factory": "",
+    "projectManager": {
+      "name": "אריה גרינברג",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "צהלה",
+      "phone": "0549993466",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "",
+      "phone": "0549993466",
+      "email": ""
+    }
+  },
+  {
+    "id": 6,
+    "projectName": "ACD1 Phase 1",
+    "company": "אלביט",
+    "division": "אלישרא",
+    "factory": "",
+    "projectManager": {
+      "name": "יובל קוט",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "צהלה",
+      "phone": "0549993466",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "",
+      "phone": "0549993466",
+      "email": ""
+    }
+  },
+  {
+    "id": 7,
+    "projectName": "ACD2 Phase 2",
+    "company": "אלביט",
+    "division": "אלישרא",
+    "factory": "",
+    "projectManager": {
+      "name": "יובל קוט",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "צהלה",
+      "phone": "0549993466",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "",
+      "phone": "0549993466",
+      "email": ""
+    }
+  },
+  {
+    "id": 8,
+    "projectName": "System B",
+    "company": "אלביט",
+    "division": "אלישרא",
+    "factory": "",
+    "projectManager": {
+      "name": "",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "צהלה",
+      "phone": "0549993466",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "",
+      "phone": "0549993466",
+      "email": ""
+    }
+  },
+  {
+    "id": 9,
+    "projectName": "רקטות ספיריט",
+    "company": "אלביט",
+    "division": "יבשה",
+    "factory": "",
+    "projectManager": {
+      "name": "",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "לרנר יהודית",
+      "phone": "0525773344",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "",
+      "phone": "0525773344",
+      "email": ""
+    }
+  },
+  {
+    "id": 10,
+    "projectName": "מטוס משימה תע\"א MMA",
+    "company": "תע\"א",
+    "division": "אלתא",
+    "factory": "מטוסים",
+    "projectManager": {
+      "name": "יוסי",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "",
+      "phone": "0526174815",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "קרן",
+      "phone": "0526174815",
+      "email": ""
+    }
+  },
+  {
+    "id": 11,
+    "projectName": "אופציות ותחזוקה ל MMA",
+    "company": "תע\"א",
+    "division": "אלתא",
+    "factory": "מטוסים",
+    "projectManager": {
+      "name": "יוסי",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "",
+      "phone": "0526174816",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "קרן",
+      "phone": "0526174816",
+      "email": ""
+    }
+  },
+  {
+    "id": 12,
+    "projectName": "NXDL 15",
+    "company": "תע\"א",
+    "division": "",
+    "factory": "",
+    "projectManager": {
+      "name": "אילן זהרן",
+      "phone": "",
+      "email": ""
+    },
+    "consultantManager": {
+      "name": "",
+      "phone": "",
+      "email": ""
+    },
+    "financeManager": {
+      "name": "",
+      "phone": "",
+      "email": ""
+    }
+  }
+]
