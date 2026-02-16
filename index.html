@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1976D2">
+    <meta name="description" content="Payment Tracker - Manage your business payments and milestones">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Payment Tracker Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+</head>
+<body>
+    <!-- Main App Container -->
+    <div id="app" class="app-container">
+
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <button class="nav-back" id="navBack" style="display: none;">
+                <span class="icon">←</span>
+            </button>
+            <h1 class="nav-title" id="navTitle">Payment Tracker</h1>
+            <button class="nav-menu" id="navMenu">
+                <span class="icon">☰</span>
+            </button>
+        </nav>
+
+        <!-- Side Menu Overlay -->
+        <div class="menu-overlay" id="menuOverlay"></div>
+        <div class="side-menu" id="sideMenu">
+            <div class="menu-header">
+                <h2>Menu</h2>
+                <button class="menu-close" id="menuClose">×</button>
+            </div>
+            <ul class="menu-list">
+                <li><a href="#" data-view="dashboard" class="menu-item active">
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard</span>
+                </a></li>
+                <li><a href="#" data-view="payments" class="menu-item">
+                    <span class="menu-icon">💳</span>
+                    <span>All Payments</span>
+                </a></li>
+                <li><a href="#" data-view="late" class="menu-item">
+                    <span class="menu-icon">🚨</span>
+                    <span>Late Payments</span>
+                    <span class="menu-badge" id="lateBadge">0</span>
+                </a></li>
+                <li><a href="#" data-view="contacts" class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    <span>Contacts</span>
+                </a></li>
+                <li><a href="#" data-view="projects" class="menu-item">
+                    <span class="menu-icon">📦</span>
+                    <span>Projects</span>
+                </a></li>
+                <li><a href="#" data-view="sync" class="menu-item">
+                    <span class="menu-icon">🔄</span>
+                    <span>Sync Settings</span>
+                </a></li>
+            </ul>
+            <div class="menu-footer">
+                <button id="exportData" class="btn-secondary">Export Data</button>
+                <button id="importData" class="btn-secondary">Import Data</button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="view active">
+                <div class="stats-grid">
+                    <div class="stat-card stat-danger">
+                        <div class="stat-icon">🚨</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Late Payments</div>
+                            <div class="stat-value" id="statLate">0</div>
+                            <div class="stat-detail" id="statLateAmount">$0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-warning">
+                        <div class="stat-icon">⏰</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Not Due Yet</div>
+                            <div class="stat-value" id="statPending">0</div>
+                            <div class="stat-detail" id="statPendingAmount">$0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-success">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Paid</div>
+                            <div class="stat-value" id="statPaid">0</div>
+                            <div class="stat-detail" id="statPaidAmount">$0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-primary">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Total Outstanding</div>
+                            <div class="stat-value-large" id="statOutstanding">$0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="action-btn btn-danger" data-view="late">
+                        <span class="icon">🚨</span>
+                        <span>View Late Payments</span>
+                    </button>
+                    <button class="action-btn btn-primary" data-view="payments">
+                        <span class="icon">💳</span>
+                        <span>All Payments</span>
+                    </button>
+                    <button class="action-btn btn-info" data-view="contacts">
+                        <span class="icon">👥</span>
+                        <span>Contact POCs</span>
+                    </button>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">Recent Activity</h2>
+                    <div id="recentActivity" class="activity-list">
+                        <!-- Activity items will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments List View - ENHANCED -->
+            <div id="paymentsView" class="view">
+                <div class="filters-bar">
+                    <input type="search" id="searchPayments" class="search-input" placeholder="Search payments...">
+
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="Late — not paid">Late</button>
+                        <button class="filter-btn" data-filter="Not due yet">Pending</button>
+                        <button class="filter-btn" data-filter="Paid">Paid</button>
+                    </div>
+
+                    <!-- ENHANCED: Advanced Filters Section -->
+                    <div class="advanced-filters">
+                        <div class="filter-group">
+                            <label class="filter-group-label">📂 Projects (select multiple)</label>
+                            <div id="projectCheckboxes" class="checkbox-group">
+                                <!-- Project checkboxes will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-group-label">📅 Year</label>
+                            <div id="yearCheckboxes" class="checkbox-group checkbox-group-inline">
+                                <!-- Year checkboxes will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-group-label">🔄 Sort By</label>
+                            <select id="sortSelect" class="filter-select">
+                                <option value="dueDate">Due Date (Earliest First)</option>
+                                <option value="dueDateDesc">Due Date (Latest First)</option>
+                                <option value="amountAsc">Amount (Low to High)</option>
+                                <option value="amountDesc">Amount (High to Low)</option>
+                                <option value="project">Project Name (A-Z)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- ENHANCED: Filtered Totals Display -->
+                    <div id="filteredTotals" class="filtered-totals">
+                        <!-- Totals will be populated here -->
+                    </div>
+                </div>
+
+                <div id="paymentsList" class="payments-list">
+                    <!-- Payment cards will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Late Payments View -->
+            <div id="lateView" class="view">
+                <div class="alert alert-danger">
+                    <strong>⚠️ Urgent Action Required</strong>
+                    <p>These payments are overdue and need immediate attention.</p>
+                </div>
+                <div id="latePaymentsList" class="payments-list">
+                    <!-- Late payment cards will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Payment Detail View -->
+            <div id="paymentDetailView" class="view">
+                <div id="paymentDetail" class="detail-card">
+                    <!-- Payment details will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Contacts View -->
+            <div id="contactsView" class="view">
+                <div class="filters-bar">
+                    <input type="search" id="searchContacts" class="search-input" placeholder="Search contacts...">
+                </div>
+                <div id="contactsList" class="contacts-list">
+                    <!-- Contact cards will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Contact Detail View -->
+            <div id="contactDetailView" class="view">
+                <div id="contactDetail" class="detail-card">
+                    <!-- Contact details will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Projects View -->
+            <div id="projectsView" class="view">
+                <div id="projectsList" class="projects-list">
+                    <!-- Project cards will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Project Detail View -->
+            <div id="projectDetailView" class="view">
+                <div id="projectDetail" class="detail-card">
+                    <!-- Project details will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Sync Settings View -->
+            <div id="syncView" class="view">
+                <div class="settings-container">
+                    <h2>Google Sheets Sync</h2>
+                    <div class="info-box">
+                        <p>Connect your app to Google Sheets to automatically sync payment data.</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Google Sheets URL</label>
+                        <input type="url" id="sheetsUrl" class="form-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+                        <small>Paste your Google Sheets URL here</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Sync Frequency</label>
+                        <select id="syncFrequency" class="form-select">
+                            <option value="manual">Manual only</option>
+                            <option value="5">Every 5 minutes</option>
+                            <option value="15">Every 15 minutes</option>
+                            <option value="60">Every hour</option>
+                        </select>
+                    </div>
+                    <div class="button-group">
+                        <button id="syncNow" class="btn-primary">Sync Now</button>
+                        <button id="saveSync" class="btn-secondary">Save Settings</button>
+                    </div>
+                    <div id="syncStatus" class="sync-status"></div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
