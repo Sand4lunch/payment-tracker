@@ -344,14 +344,26 @@ class PaymentTrackerApp {
     renderPayments() {
         const container = document.getElementById('paymentsList');
 
-        // Populate project filter checkboxes
-        this.populateProjectFilterCheckboxes();
+        // Populate project filter
+        this.populateProjectFilter();
 
-        // Render filtered totals
-        this.renderFilteredTotals();
+        // Filter payments
+        let filtered = this.payments;
 
-        // Get filtered and sorted payments
-        const filtered = this.getFilteredPayments();
+        if (this.currentFilter !== 'all') {
+            filtered = filtered.filter(p => p.status === this.currentFilter);
+        }
+
+        if (this.currentProject) {
+            filtered = filtered.filter(p => p.projectName === this.currentProject);
+        }
+
+        // Sort by due date
+        filtered.sort((a, b) => {
+            if (!a.dueDate) return 1;
+            if (!b.dueDate) return -1;
+            return new Date(a.dueDate) - new Date(b.dueDate);
+        });
 
         if (filtered.length === 0) {
             container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No payments found</p></div>';
@@ -1021,13 +1033,14 @@ class PaymentTrackerApp {
         this.showToast('Sync settings saved');
     }
 
-    // Service Worker
-    registerServiceWorker() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('Service Worker registered'))
-                .catch(err => console.log('Service Worker registration failed'));
-        }
+
+    populateProjectFilter() {
+        const select = document.getElementById('projectFilter');
+        if (!select) return;
+
+        const projects = [...new Set(this.payments.map(p => p.projectName))].sort();
+        select.innerHTML = '<option value="">All Projects</option>' +
+            projects.map(p => `<option value="${this.escapeHtml(p)}">${this.escapeHtml(p)}</option>`).join('');
     }
 }
 
