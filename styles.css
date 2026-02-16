@@ -269,7 +269,7 @@ body {
 
 
 /* Mobile overflow fixes */
-.stat-value, .stat-detail {
+.stat-value, .stat-value-large, .stat-detail {
     word-break: break-word;
     overflow-wrap: break-word;
     max-width: 100%;
@@ -279,7 +279,11 @@ body {
     .stat-value {
         font-size: 1.4rem;
     }
-    
+
+    .stat-value-large {
+        font-size: 1.2rem;
+    }
+
     .stat-detail {
         font-size: 0.75rem;
     }
