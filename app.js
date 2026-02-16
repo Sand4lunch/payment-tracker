@@ -7,7 +7,8 @@ class PaymentTrackerApp {
         this.contacts = [];
         this.currentView = 'dashboard';
         this.currentFilter = 'all';
-        this.currentProject = '';
+        this.selectedProjects = []; // Multi-select projects
+        this.sortBy = 'dueDate'; // Default sorting
         this.selectedPayment = null;
         this.selectedContact = null;
         this.selectedProject = null;
@@ -343,26 +344,14 @@ class PaymentTrackerApp {
     renderPayments() {
         const container = document.getElementById('paymentsList');
 
-        // Populate project filter
-        this.populateProjectFilter();
+        // Populate project filter checkboxes
+        this.populateProjectFilterCheckboxes();
 
-        // Filter payments
-        let filtered = this.payments;
+        // Render filtered totals
+        this.renderFilteredTotals();
 
-        if (this.currentFilter !== 'all') {
-            filtered = filtered.filter(p => p.status === this.currentFilter);
-        }
-
-        if (this.currentProject) {
-            filtered = filtered.filter(p => p.projectName === this.currentProject);
-        }
-
-        // Sort by due date
-        filtered.sort((a, b) => {
-            if (!a.dueDate) return 1;
-            if (!b.dueDate) return -1;
-            return new Date(a.dueDate) - new Date(b.dueDate);
-        });
+        // Get filtered and sorted payments
+        const filtered = this.getFilteredPayments();
 
         if (filtered.length === 0) {
             container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No payments found</p></div>';
@@ -884,14 +873,7 @@ class PaymentTrackerApp {
     }
 
     // Helper functions
-    populateProjectFilter() {
-        const select = document.getElementById('projectFilter');
-        if (!select) return;
 
-        const projects = [...new Set(this.payments.map(p => p.projectName))].sort();
-        select.innerHTML = '<option value="">All Projects</option>' +
-            projects.map(p => `<option value="${this.escapeHtml(p)}">${this.escapeHtml(p)}</option>`).join('');
-    }
 
     findContactForProject(projectName) {
         // Try exact match first
@@ -1054,3 +1036,173 @@ let app;
 window.addEventListener('DOMContentLoaded', () => {
     app = new PaymentTrackerApp();
 });
+
+    // New Methods for Multi-Project Filtering
+
+    selectAllProjects() {
+        const checkboxes = document.querySelectorAll('.project-checkbox');
+        const allProjects = [...new Set(this.payments.map(p => p.projectName))];
+        this.selectedProjects = allProjects;
+        checkboxes.forEach(cb => cb.checked = true);
+        this.renderPayments();
+    }
+
+    clearAllProjects() {
+        const checkboxes = document.querySelectorAll('.project-checkbox');
+        this.selectedProjects = [];
+        checkboxes.forEach(cb => cb.checked = false);
+        this.renderPayments();
+    }
+
+    toggleProjectFilter(projectName, checked) {
+        if (checked) {
+            if (!this.selectedProjects.includes(projectName)) {
+                this.selectedProjects.push(projectName);
+            }
+        } else {
+            this.selectedProjects = this.selectedProjects.filter(p => p !== projectName);
+        }
+        this.renderPayments();
+    }
+
+    getFilteredPayments() {
+        let filtered = this.payments;
+
+        // Filter by status
+        if (this.currentFilter !== 'all') {
+            filtered = filtered.filter(p => p.status === this.currentFilter);
+        }
+
+        // Filter by selected projects
+        if (this.selectedProjects.length > 0) {
+            filtered = filtered.filter(p => this.selectedProjects.includes(p.projectName));
+        }
+
+        // Apply sorting
+        return this.sortPayments(filtered);
+    }
+
+    sortPayments(payments) {
+        return [...payments].sort((a, b) => {
+            switch (this.sortBy) {
+                case 'dueDate':
+                    if (!a.dueDate) return 1;
+                    if (!b.dueDate) return -1;
+                    return new Date(a.dueDate) - new Date(b.dueDate);
+                
+                case 'amountDesc':
+                    return (b.amountOwed || 0) - (a.amountOwed || 0);
+                
+                case 'amountAsc':
+                    return (a.amountOwed || 0) - (b.amountOwed || 0);
+                
+                case 'project':
+                    return (a.projectName || '').localeCompare(b.projectName || '');
+                
+                case 'status':
+                    const statusOrder = {'Late — not paid': 0, 'Not due yet': 1, 'Paid': 2};
+                    return (statusOrder[a.status] || 3) - (statusOrder[b.status] || 3);
+                
+                default:
+                    return 0;
+            }
+        });
+    }
+
+    calculateFilteredStats() {
+        const filtered = this.getFilteredPayments();
+        
+        let lateCount = 0, lateAmount = 0;
+        let pendingCount = 0, pendingAmount = 0;
+        let paidCount = 0, paidAmount = 0;
+        let totalOwed = 0, totalExpected = 0;
+
+        filtered.forEach(payment => {
+            const status = payment.status;
+            const owed = payment.amountOwed || 0;
+            const expected = payment.expectedPaymentUSD || 0;
+
+            totalOwed += owed;
+            totalExpected += expected;
+
+            if (status === 'Late — not paid') {
+                lateCount++;
+                lateAmount += owed;
+            } else if (status === 'Not due yet') {
+                pendingCount++;
+                pendingAmount += owed;
+            } else if (status === 'Paid') {
+                paidCount++;
+                paidAmount += payment.amountPaidUSD || 0;
+            }
+        });
+
+        return {
+            count: filtered.length,
+            lateCount, lateAmount,
+            pendingCount, pendingAmount,
+            paidCount, paidAmount,
+            totalOwed, totalExpected
+        };
+    }
+
+    renderFilteredTotals() {
+        const totalsDiv = document.getElementById('filteredTotals');
+        if (!totalsDiv) return;
+
+        if (this.selectedProjects.length === 0) {
+            totalsDiv.style.display = 'none';
+            return;
+        }
+
+        totalsDiv.style.display = 'block';
+        const stats = this.calculateFilteredStats();
+
+        totalsDiv.innerHTML = `
+            <div class="filter-totals">
+                <div class="filter-totals-title">Filtered Totals (${stats.count} payments)</div>
+                <div class="filter-totals-grid">
+                    <div class="filter-total-item">
+                        <span class="filter-total-label">Late:</span>
+                        <span class="filter-total-value" style="color: var(--danger);">${stats.lateCount} (${this.formatCurrency(stats.lateAmount)})</span>
+                    </div>
+                    <div class="filter-total-item">
+                        <span class="filter-total-label">Pending:</span>
+                        <span class="filter-total-value" style="color: var(--warning);">${stats.pendingCount} (${this.formatCurrency(stats.pendingAmount)})</span>
+                    </div>
+                    <div class="filter-total-item">
+                        <span class="filter-total-label">Paid:</span>
+                        <span class="filter-total-value" style="color: var(--success);">${stats.paidCount} (${this.formatCurrency(stats.paidAmount)})</span>
+                    </div>
+                    <div class="filter-total-item">
+                        <span class="filter-total-label">Total Owed:</span>
+                        <span class="filter-total-value" style="color: var(--primary);">${this.formatCurrency(stats.totalOwed)}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    populateProjectFilterCheckboxes() {
+        const container = document.getElementById('projectFilterCheckboxes');
+        if (!container) return;
+
+        const projects = [...new Set(this.payments.map(p => p.projectName))].sort();
+        
+        container.innerHTML = projects.map(project => `
+            <label class="checkbox-label">
+                <input type="checkbox" class="project-checkbox" value="${this.escapeHtml(project)}" 
+                    ${this.selectedProjects.includes(project) ? 'checked' : ''}>
+                <span>${this.escapeHtml(project)}</span>
+            </label>
+        `).join('');
+
+        // Add change listeners
+        container.querySelectorAll('.project-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                this.toggleProjectFilter(e.target.value, e.target.checked);
+            });
+        });
+    }
+}
+
