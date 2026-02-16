@@ -7,8 +7,7 @@ class PaymentTrackerApp {
         this.contacts = [];
         this.currentView = 'dashboard';
         this.currentFilter = 'all';
-        this.selectedProjects = []; // Multi-select projects
-        this.sortBy = 'dueDate'; // Default sorting
+        this.currentProject = ''; // Current project filter
         this.selectedPayment = null;
         this.selectedContact = null;
         this.selectedProject = null;
